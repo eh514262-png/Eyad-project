@@ -1,1 +1,123 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عيد ميلاد سعيد سهيله 🎉</title>
+<style>
+  body {
+    margin:0;
+    font-family:'Arial',sans-serif;
+    background: linear-gradient(to bottom, #ffcccc, #ff99cc);
+    color:#fff;
+    text-align:center;
+    overflow:hidden;
+  }
 
+  .hearts { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:0; }
+  .heart { position:absolute; width:20px; height:20px; background:red; transform:rotate(-45deg); animation: float 6s infinite; }
+  .heart::before, .heart::after { content:""; position:absolute; width:20px; height:20px; background:red; border-radius:50%; }
+  .heart::before { top:-10px; left:0; }
+  .heart::after { left:10px; top:0; }
+  @keyframes float { 0% { transform: translateY(0) rotate(-45deg); opacity:1; } 100% { transform: translateY(-800px) rotate(-45deg); opacity:0; } }
+
+  .container { position:relative; z-index:1; margin-top:20%; }
+  input { padding:10px; font-size:18px; border-radius:10px; border:none; text-align:center; width:70%; }
+  button { padding:10px 20px; font-size:18px; margin-top:10px; border:none; border-radius:10px; background-color:#ff3366; color:#fff; cursor:pointer; }
+  
+  .gift { display:none; margin-top:20px; }
+  .timer-box { display:flex; justify-content:center; gap:15px; margin-top:15px; flex-wrap:wrap; }
+  .timer-box div { background: rgba(255,255,255,0.2); padding:15px; border-radius:10px; min-width:70px; font-size:20px; }
+  audio { margin-top:15px; width:80%; }
+
+</style>
+</head>
+<body>
+
+<div class="hearts" id="hearts"></div>
+
+<!-- شاشة الدخول -->
+<div class="container" id="loginScreen">
+  <h1>عيد ميلاد سعيد 🎉</h1>
+  <p>اكتبي الباسورد عشان تفتحي هديتك 💖</p>
+  <input type="password" id="passInput" placeholder="اكتبي الباسورد هنا ❤️">
+  <br>
+  <button onclick="checkPassword()">فتح الهدية 🎁</button>
+</div>
+
+<!-- شاشة الهدية -->
+<div class="container gift" id="giftScreen">
+  <h1>عيد ميلاد سعيد يا سهيله 💖</h1>
+
+  <div class="timer-box">
+    <div><span id="days">0</span><br>أيام</div>
+    <div><span id="hours">0</span><br>ساعات</div>
+    <div><span id="minutes">0</span><br>دقائق</div>
+    <div><span id="seconds">0</span><br>ثواني</div>
+  </div>
+
+  <p style="margin-top:20px; font-size:20px;">اجمل بنت هتكمل 15 سنة يوم 24/3 🎉</p>
+  <p style="margin-top:10px; font-size:18px;">اتولد أجمل شخص في العالم 😍 سهيله</p>
+  <p style="margin-top:5px; font-size:18px;">كل لحظة معاكي بتفرح قلبي 💕</p>
+
+  <audio controls autoplay loop>
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  </audio>
+</div>
+
+<script>
+const password = "عيد ميلاد سعيد";
+
+function checkPassword() {
+  const input = document.getElementById('passInput').value;
+  if(input === password) {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('giftScreen').style.display = 'block';
+    startTimer();
+  } else {
+    alert("الباسورد غلط 😢 حاول تاني");
+  }
+}
+
+// قلوب متطايرة
+function createHeart() {
+  const heart = document.createElement('div');
+  heart.className = 'heart';
+  heart.style.left = Math.random() * window.innerWidth + 'px';
+  heart.style.animationDuration = (Math.random()*3 + 3) + 's';
+  document.getElementById('hearts').appendChild(heart);
+  setTimeout(()=> heart.remove(), 6000);
+}
+setInterval(createHeart, 300);
+
+// عداد الوقت لعيد الميلاد القادم
+function startTimer() {
+  function updateTimer() {
+    const now = new Date();
+    let currentYear = now.getFullYear();
+    let birthday = new Date(`March 24, ${currentYear} 00:00:00`);
+    
+    // لو عيد الميلاد السنة دي فات، نحسب للعام الجاي
+    if(now > birthday) {
+      birthday = new Date(`March 24, ${currentYear+1} 00:00:00`);
+    }
+
+    const diff = birthday - now;
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const minutes = Math.floor((diff / (1000*60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById('days').textContent = days;
+    document.getElementById('hours').textContent = hours;
+    document.getElementById('minutes').textContent = minutes;
+    document.getElementById('seconds').textContent = seconds;
+  }
+
+  updateTimer();
+  setInterval(updateTimer, 1000);
+}
+</script>
+
+</body>
+</html>
